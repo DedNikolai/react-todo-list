@@ -9,21 +9,28 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {Link, Navigate} from 'react-router-dom';
 import { AuthContext } from '../components/AuthProvider';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-// TODO remove, this demo shouldn't need to reset the theme.
+const schema = yup.object({
+  email: yup.string().email('Invalid Email').required('Please input email'),
+  password: yup.string().required(),
+}).required();
 
 const defaultTheme = createTheme();
 
 export default function Login() {  
   const {isAuth, setIsAuth} = React.useContext(AuthContext)
-  const handleSubmit = (event) => {
-    setIsAuth(true)
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const {register, handleSubmit, formState: {errors}, reset} = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onBlur'
+  });
+
+  const onSubmit = (data) => {
+    // setIsAuth(true)
+    console.log(data)
+    reset();
   };
 
   if (isAuth) return <Navigate to='/' />
@@ -45,23 +52,27 @@ export default function Login() {
               <Typography component="h1" variant="h5">
                 Sign in
               </Typography>
-              <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+              <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
                 <TextField
+                  {...register("email")}
+                  label={errors.email?.message || "Email Address"}
+                  error={errors.hasOwnProperty('email')}
                   margin="normal"
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
                   name="email"
                   autoComplete="email"
                   autoFocus
                 />
                 <TextField
+                  {...register("password")}
+                  label={errors.password?.message || "Input password"}
+                  error={errors.hasOwnProperty('password')}
                   margin="normal"
                   required
                   fullWidth
                   name="password"
-                  label="Password"
                   type="password"
                   id="password"
                   autoComplete="current-password"

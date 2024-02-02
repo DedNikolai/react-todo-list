@@ -5,28 +5,39 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {Link, Navigate} from 'react-router-dom';
-import { AuthContext } from '../components/AuthProvider';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
+
+const schema = yup.object({
+  email: yup.string().email('Invalid Email').required('Please input email'),
+  firstName: yup.string().required('Please input firstName').min(2, 'To short').max(20, 'To long'),
+  lastName: yup.string().required('Please input lastName').min(2, 'To short').max(20, 'To long')
+}).required();
+
 export default function Profile() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const {register, handleSubmit, formState: {errors}, reset} = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onBlur',
+    defaultValues: {
+      firstName: 'Nick',
+      lastName: "Blash",
+      email: 'nikolai.blashchuk@gmail.com'
+    }
+  });
+
+  const onSubmit = (data) => {
+    console.log(data);
+    reset();
   };
   
-
   return (
     <div className="container">
       <div className="todo-app">
@@ -44,35 +55,41 @@ export default function Profile() {
                 John Doe Profile
               </Typography>
               <Avatar sx={{ width: 100, height: 100 }}/>
-              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
+                      {...register("firstName")}
+                      label={errors?.firstName?.message || "First Name"}
+                      error={errors.hasOwnProperty('firstName')}
                       autoComplete="given-name"
                       name="firstName"
                       required
                       fullWidth
                       id="firstName"
-                      label="First Name"
                       autoFocus
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
+                     {...register("lastName")}
+                      label={errors?.lastName?.message || "Last Name"}
+                      error={errors.hasOwnProperty('firlastNamestName')}
                       required
                       fullWidth
                       id="lastName"
-                      label="Last Name"
                       name="lastName"
                       autoComplete="family-name"
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
+                      {...register("email")}
+                      label={errors.email?.message || "Email Address"}
+                      error={errors.hasOwnProperty('email')}
                       required
                       fullWidth
                       id="email"
-                      label="Email Address"
                       name="email"
                       autoComplete="email"
                     />

@@ -11,20 +11,32 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {Link, Navigate} from 'react-router-dom';
 import { AuthContext } from '../components/AuthProvider';
-
-// TODO remove, this demo shouldn't need to reset the theme.
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const defaultTheme = createTheme();
 
+const schema = yup.object({
+  email: yup.string().email('Invalid Email').required('Please input email'),
+  password: yup.string().required('Please input password').min(6, 'To short').max(20, 'To long'),
+  passwordConfirmation: yup.string()
+     .oneOf([yup.ref('password'), null], 'Passwords must match'),
+  firstName: yup.string().required('Please input firstName').min(2, 'To short').max(20, 'To long'),
+  lastName: yup.string().required('Please input lastName').min(2, 'To short').max(20, 'To long')
+}).required();
+
 export default function Register() {
-  const {isAuth, setIsAuth} = React.useContext(AuthContext)
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const {register, handleSubmit, formState: {errors}, reset} = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onBlur'
+  });
+
+  const {isAuth, setIsAuth} = React.useContext(AuthContext);
+
+  const onSubmit = (data) => {
+    console.log(data);
+    reset();
   };
   
   if (isAuth) return <Navigate to='/' />
@@ -48,48 +60,69 @@ export default function Register() {
               <Typography component="h1" variant="h5">
                 Sign up
               </Typography>
-              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
+                      {...register("firstName")}
+                      label={errors?.firstName?.message || "First Name"}
+                      error={errors.hasOwnProperty('firstName')}
                       autoComplete="given-name"
                       name="firstName"
                       required
                       fullWidth
                       id="firstName"
-                      label="First Name"
                       autoFocus
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
+                      {...register("lastName")}
+                      label={errors?.lastName?.message || "Last Name"}
+                      error={errors.hasOwnProperty('lastName')}
                       required
                       fullWidth
                       id="lastName"
-                      label="Last Name"
                       name="lastName"
                       autoComplete="family-name"
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
+                      {...register("email")}
+                      label={errors.email?.message || "Email Address"}
+                      error={errors.hasOwnProperty('email')}
                       required
                       fullWidth
                       id="email"
-                      label="Email Address"
                       name="email"
                       autoComplete="email"
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
+                      {...register("password")}
+                      label={errors.password?.message || "Input password"}
+                      error={errors.hasOwnProperty('password')}
                       required
                       fullWidth
                       name="password"
-                      label="Password"
                       type="password"
                       id="password"
                       autoComplete="new-password"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      {...register("passwordConfirmation")}
+                      label={errors.passwordConfirmation?.message || "Confirm password"}
+                      error={errors.hasOwnProperty('passwordConfirmation')}
+                      required
+                      fullWidth
+                      name="passwordConfirmation"
+                      type="password"
+                      id="passwordConfirmation"
+                      autoComplete="confirm-password"
                     />
                   </Grid>
                 </Grid>
