@@ -15,8 +15,6 @@ import AdbIcon from '@mui/icons-material/Adb';
 import {Link} from 'react-router-dom';
 import { AuthContext } from './AuthProvider';
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -46,12 +44,10 @@ function Header() {
     <AppBar position='fixed'>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Link to='/'><AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /></Link>
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -62,14 +58,12 @@ function Header() {
                 textDecoration: 'none',
               }}
             >
-              TODO'S
+             <Link to='/'>TODO'S</Link> 
             </Typography>
-            <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+            <Link to='/'><AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /></Link>
             <Typography
               variant="h5"
               noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
@@ -81,7 +75,7 @@ function Header() {
                 textDecoration: 'none',
               }}
             >
-              TODO'S
+             <Link to='/'>TODO'S</Link> 
             </Typography>
           {
             !isAuth ?
@@ -137,6 +131,9 @@ function Header() {
                 Login
               </Button>
             </Link>
+            <MenuItem sx={{padding: '0 5px'}}>
+              <Typography textAlign="center">|</Typography>
+            </MenuItem>
             <Link to='/register'>
               <Button
                 onClick={handleCloseNavMenu}

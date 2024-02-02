@@ -16,8 +16,7 @@ import { AuthContext } from '../components/AuthProvider';
 
 const defaultTheme = createTheme();
 
-export default function Register() {
-  const {isAuth, setIsAuth} = React.useContext(AuthContext)
+export default function Profile() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -27,7 +26,6 @@ export default function Register() {
     });
   };
   
-  if (isAuth) return <Navigate to='/' />
 
   return (
     <div className="container">
@@ -42,12 +40,10 @@ export default function Register() {
                 alignItems: 'center',
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                <LockOutlinedIcon />
-              </Avatar>
               <Typography component="h1" variant="h5">
-                Sign up
+                John Doe Profile
               </Typography>
+              <Avatar sx={{ width: 100, height: 100 }}/>
               <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
@@ -81,17 +77,6 @@ export default function Register() {
                       autoComplete="email"
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      name="password"
-                      label="Password"
-                      type="password"
-                      id="password"
-                      autoComplete="new-password"
-                    />
-                  </Grid>
                 </Grid>
                 <Button
                   type="submit"
@@ -99,15 +84,8 @@ export default function Register() {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Sign Up
+                  Save
                 </Button>
-                <Grid container justifyContent="flex-end">
-                  <Grid item>
-                    <Link to="/login" className="custom-link">
-                      Already have an account? Sign in
-                    </Link>
-                  </Grid>
-                </Grid>
               </Box>
             </Box>
           </Container>
