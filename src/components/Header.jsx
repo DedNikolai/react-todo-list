@@ -13,12 +13,12 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import {Link} from 'react-router-dom';
-import { AuthContext } from './AuthProvider';
+import { useSelector } from 'react-redux';
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const {isAuth, setIsAuth} = React.useContext(AuthContext);
+  const {user} = useSelector(state => state.user);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -36,8 +36,7 @@ function Header() {
   };
 
   const logout = () => {
-    handleCloseUserMenu();
-    setIsAuth(false)
+    
   }
 
   return (
@@ -78,7 +77,7 @@ function Header() {
              <Link to='/'>TODO'S</Link> 
             </Typography>
           {
-            !isAuth ?
+            !user ?
           <>   
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none', justifyContent: 'right' } }}>
             <IconButton

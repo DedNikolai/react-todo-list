@@ -1,16 +1,18 @@
+import React, {Fragment} from 'react';
 import TodoList from './pages/TodoList';
 import {Routes, Route} from 'react-router-dom';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
-import AuthProvider from './components/AuthProvider';
 import Profile from './pages/Profile';
+import { ToastContainer } from 'react-toastify';
 
 
 function App() {
   return (
-    <AuthProvider>
+    <Fragment>
+      <ToastContainer />
       <Routes>
           <Route path='/' element={<Layout />}>
               <Route index element={<ProtectedRoute><TodoList /></ProtectedRoute> }/>
@@ -19,7 +21,7 @@ function App() {
               <Route path='register' element={<Register />}/>
           </Route> 
       </Routes>
-    </AuthProvider>
+    </Fragment>
   );
 }
 

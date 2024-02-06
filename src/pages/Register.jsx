@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {Link, Navigate} from 'react-router-dom';
-import { AuthContext } from '../components/AuthProvider';
+import { useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -32,14 +32,14 @@ export default function Register() {
     mode: 'onBlur'
   });
 
-  const {isAuth, setIsAuth} = React.useContext(AuthContext);
+  const {user} = useSelector(state => state.user)
 
   const onSubmit = (data) => {
     console.log(data);
     reset();
   };
   
-  if (isAuth) return <Navigate to='/' />
+  if (user) return <Navigate to='/' />
 
   return (
     <div className="container">

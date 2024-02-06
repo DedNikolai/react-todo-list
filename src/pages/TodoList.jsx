@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import todoImage from "../image/todo.png"
+import todoImage from "../image/todo.png";
 
 const TodoList = () => {
   // State variables
@@ -156,7 +156,6 @@ const TodoList = () => {
   // Render the todo list
   return (
     <div className="container">
-      <ToastContainer />
       <div className="todo-app">
         <h2>
           <img src={todoImage} alt="todo-image" /> Todo List

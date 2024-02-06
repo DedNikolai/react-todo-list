@@ -8,10 +8,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {Link, Navigate} from 'react-router-dom';
-import { AuthContext } from '../components/AuthProvider';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import {useSelector, useDispatch} from "react-redux";
+import {login} from '../store/slice/user';
 
 const schema = yup.object({
   email: yup.string().email('Invalid Email').required('Please input email'),
@@ -21,19 +22,19 @@ const schema = yup.object({
 const defaultTheme = createTheme();
 
 export default function Login() {  
-  const {isAuth, setIsAuth} = React.useContext(AuthContext)
+  const {user, userLoading} = useSelector(state => state.user);
+  const dispatch = useDispatch();
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
     resolver: yupResolver(schema),
     mode: 'onBlur'
   });
 
   const onSubmit = (data) => {
-    // setIsAuth(true)
-    console.log(data)
+    dispatch(login(data));
     reset();
   };
 
-  if (isAuth) return <Navigate to='/' />
+  if (user) return <Navigate to='/' />
 
   return (
     <div className="container">
