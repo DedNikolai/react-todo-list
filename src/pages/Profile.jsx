@@ -11,7 +11,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
+import { useSelector } from 'react-redux';
 
 const defaultTheme = createTheme();
 
@@ -23,13 +23,14 @@ const schema = yup.object({
 }).required();
 
 export default function Profile() {
+  const {user} = useSelector(state => state.user)
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
     resolver: yupResolver(schema),
     mode: 'onBlur',
     defaultValues: {
-      firstName: 'Nick',
-      lastName: "Blash",
-      email: 'nikolai.blashchuk@gmail.com'
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email
     }
   });
 
@@ -52,9 +53,12 @@ export default function Profile() {
               }}
             >
               <Typography component="h1" variant="h5">
-                John Doe Profile
+                {`${user.firstName + ' ' + user.lastName} Profile`}
               </Typography>
-              <Avatar sx={{ width: 100, height: 100 }}/>
+              <Avatar 
+                sx={{ width: 100, height: 100 }}
+                src = {user.avatarUrl} 
+              />
               <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>

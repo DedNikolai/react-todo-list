@@ -9,11 +9,12 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {Link, Navigate} from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import {Link, Navigate, useNavigate} from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { create } from '../store/slice/user';
 
 const defaultTheme = createTheme();
 
@@ -27,18 +28,21 @@ const schema = yup.object({
 }).required();
 
 export default function Register() {
-  const {register, handleSubmit, formState: {errors}, reset} = useForm({
+  const {register, handleSubmit, formState: {errors}} = useForm({
     resolver: yupResolver(schema),
     mode: 'onBlur'
   });
-
+  const navigate = useNavigate();
   const {user} = useSelector(state => state.user)
+  const dispatch = useDispatch();
+
 
   const onSubmit = (data) => {
-    console.log(data);
-    reset();
+      dispatch(create(data)).then(() => {
+        navigate('/login')
+    })
   };
-  
+
   if (user) return <Navigate to='/' />
 
   return (

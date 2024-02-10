@@ -13,12 +13,14 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import {Link} from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../store/slice/user';
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const {user} = useSelector(state => state.user);
+  const dispatch = useDispatch();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -35,8 +37,9 @@ function Header() {
     setAnchorElUser(null);
   };
 
-  const logout = () => {
-    
+  const signOut = () => {
+    handleCloseUserMenu();
+    dispatch(logout());
   }
 
   return (
@@ -170,8 +173,8 @@ function Header() {
                 <MenuItem onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
-                </Link>
-               <MenuItem onClick={logout}>
+              </Link>
+               <MenuItem onClick={signOut}>
                   <Typography textAlign="center">Logout</Typography>
                </MenuItem>
             </Menu>
