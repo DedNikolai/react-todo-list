@@ -10,7 +10,6 @@ const axiosInstance = axios.create({
   
       if (authToken) {
         config.headers.authorization = `Bearer ${authToken}`;
-        config.headers['Content-Type'] = 'application/json'
       }
   
       return config;

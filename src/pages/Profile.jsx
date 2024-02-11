@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useSelector } from 'react-redux';
+import api from '../utils/api';
 
 const defaultTheme = createTheme();
 
@@ -23,7 +24,8 @@ const schema = yup.object({
 }).required();
 
 export default function Profile() {
-  const {user} = useSelector(state => state.user)
+  const {user} = useSelector(state => state.user);
+  const inputFileRef = React.useRef(null);
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
     resolver: yupResolver(schema),
     mode: 'onBlur',
@@ -33,12 +35,27 @@ export default function Profile() {
       email: user.email
     }
   });
+  const [avatar, setavatar] = React.useState('')
 
   const onSubmit = (data) => {
     console.log(data);
     reset();
   };
-  
+
+  const handleChangeFile = async (event) => {
+    try {
+      const formData = new FormData();
+      const file = event.target.files[0]
+      formData.append('image', file);
+      const {data} = await api.post('/auth/upload-image', formData);
+      console.log(data)
+      setavatar(data.url);
+    } catch (error) {
+      console.log(error);
+      alert('Failed file load');
+    }
+  };
+  console.log(`http://localhost:8000${avatar}`)
   return (
     <div className="container">
       <div className="todo-app">
@@ -57,8 +74,10 @@ export default function Profile() {
               </Typography>
               <Avatar 
                 sx={{ width: 100, height: 100 }}
-                src = {user.avatarUrl} 
+                src = {`http://localhost:8000${avatar || user.avatarUrl}`}
+                onClick={() => inputFileRef.current.click()} 
               />
+              <input ref={inputFileRef} type="file" onChange={handleChangeFile} hidden />
               <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
