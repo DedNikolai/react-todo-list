@@ -32,7 +32,7 @@ export default function Profile() {
     defaultValues: {
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email
+      email: user.email,
     }
   });
   const [avatar, setavatar] = React.useState('')
@@ -55,7 +55,9 @@ export default function Profile() {
       alert('Failed file load');
     }
   };
-  console.log(`http://localhost:8000${avatar}`)
+
+  const userAvatarImg = `http://localhost:8000${avatar || user.avatarUrl}`
+
   return (
     <div className="container">
       <div className="todo-app">
@@ -74,7 +76,7 @@ export default function Profile() {
               </Typography>
               <Avatar 
                 sx={{ width: 100, height: 100 }}
-                src = {`http://localhost:8000${avatar || user.avatarUrl}`}
+                src = {userAvatarImg}
                 onClick={() => inputFileRef.current.click()} 
               />
               <input ref={inputFileRef} type="file" onChange={handleChangeFile} hidden />

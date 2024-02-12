@@ -58,7 +58,11 @@ const userSlice = createSlice({
         logout(state) {
             state.user = null;
             window.localStorage.removeItem("auth-token");
-        }
+        },
+
+        toggleLoading(state, action) {
+            state.userLoading = action.payload;
+        } 
     },
 
     extraReducers: (builder) => {
@@ -104,6 +108,6 @@ const userSlice = createSlice({
     }
 });
 
-export const {logout} = userSlice.actions;
+export const {logout, toggleLoading} = userSlice.actions;
 export default userSlice.reducer;
 

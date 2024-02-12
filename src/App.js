@@ -7,20 +7,8 @@ import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './pages/Profile';
 import { ToastContainer } from 'react-toastify';
-import { useDispatch } from 'react-redux';
-import { authMe } from './store/slice/user';
-
 
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const token = window.localStorage.getItem('auth-token');
-    if (token) {
-      dispatch(authMe())
-    }
-  }, []);
-
   return (
     <Fragment>
       <ToastContainer position="top-center" />
