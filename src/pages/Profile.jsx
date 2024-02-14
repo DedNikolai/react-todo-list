@@ -11,8 +11,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import api from '../utils/api';
+import {update} from '../store/slice/user';
 
 const defaultTheme = createTheme();
 
@@ -35,11 +36,12 @@ export default function Profile() {
       email: user.email,
     }
   });
-  const [avatar, setavatar] = React.useState('')
+  const [avatar, setavatar] = React.useState('');
+  const dispatch = useDispatch();
+  const userAvatarImg = avatar ? `http://localhost:8000${avatar}` : user.avatarUrl;
 
   const onSubmit = (data) => {
-    console.log(data);
-    reset();
+    dispatch(update({id: user._id, avatarUrl: userAvatarImg, ...data}));
   };
 
   const handleChangeFile = async (event) => {
@@ -48,15 +50,12 @@ export default function Profile() {
       const file = event.target.files[0]
       formData.append('image', file);
       const {data} = await api.post('/auth/upload-image', formData);
-      console.log(data)
       setavatar(data.url);
     } catch (error) {
       console.log(error);
       alert('Failed file load');
     }
   };
-
-  const userAvatarImg = `http://localhost:8000${avatar || user.avatarUrl}`
 
   return (
     <div className="container">

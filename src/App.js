@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
+
   return (
     <Fragment>
       <ToastContainer position="top-center" />

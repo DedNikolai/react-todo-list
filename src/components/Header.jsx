@@ -152,7 +152,7 @@ function Header() {
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar 
                   alt={`${user.firstName + ' ' + user.lastName}`} 
-                  src = {`http://localhost:8000${user.avatarUrl}`}
+                  src = {user.avatarUrl}
                 />
               </IconButton>
             </Tooltip>

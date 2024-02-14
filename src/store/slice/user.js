@@ -46,12 +46,30 @@ export const create = createAsyncThunk('user/create', async (data, {rejectWithVa
     }
 });
 
+export const update = createAsyncThunk('user/update', async (data, {rejectWithValue}) => {
+    const {id, avatarUrl, ...user} = data;
+    if (avatarUrl) {
+        user.avatarUrl = avatarUrl;
+    }
+    try {
+        const response = await api.patch(`/auth/update/${id}`, user);
+        if (response.status !== 200) {
+            throw new Error(response.errors);
+        }
+        
+        return response.data;
+
+    } catch (error) {
+        console.log(error);
+        return rejectWithValue(error);
+    }
+});
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: null,
-        userLoading: false
+        userLoading: true
     },
 
     reducers: {
@@ -102,6 +120,19 @@ const userSlice = createSlice({
                 toast.success('Register seccess')
             })
             .addCase(create.rejected, (state, action) => {
+                toast.error(action.payload.response.data.message)    
+                state.userLoading = false;
+            })
+            .addCase(update.pending, (state) => {
+                state.userLoading = true;
+            })
+            .addCase(update.fulfilled, (state, action) => {
+                
+                state.userLoading = false;
+                state.user = action.payload;
+                toast.success('Update seccess')
+            })
+            .addCase(update.rejected, (state, action) => {
                 toast.error(action.payload.response.data.message)    
                 state.userLoading = false;
             })
