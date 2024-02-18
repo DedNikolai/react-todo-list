@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import todoImage from "../image/todo.png";
 import {useSelector, useDispatch} from 'react-redux';
-import {getAll, create} from '../store/slice/todo';
+import {getAll, create, update, remove} from '../store/slice/todo';
 import Loader from '../components/Loader';
 
 const TodoList = () => {
@@ -31,21 +29,30 @@ const TodoList = () => {
 
   // Handle checkbox change for a task
   const handleTaskCheckboxChange = (taskId) => {
-    
+    const todo = todos.find(item => item._id === taskId);
+    const {_id, text} = todo;
+    dispatch(update({text, _id, isDone: !todo.isDone}));
   };
 
   // Delete a task
   const handleDeleteTask = (taskId) => {
+    dispatch(remove(taskId))
   };
 
   // Edit a task
   const handleEditTask = (taskId) => {
-
+    const todo = todos.find(item => item._id === taskId);
+    setInputValue(todo.text);
+    setEditTaskId(taskId);
   };
 
   // Update a task
-  const handleUpdateTask = async () => {
-  
+  const handleUpdateTask = () => {
+    const todo = todos.find(item => item._id === editTaskId);
+    const {_id, isDone} = todo;
+    dispatch(update({text: inputValue, _id, isDone}));
+    setInputValue('');
+    setEditTaskId(null);
   };
 
   // Mark all tasks as completed
@@ -128,14 +135,14 @@ const TodoList = () => {
                 <img
                   src="https://cdn-icons-png.flaticon.com/128/1159/1159633.png"
                   className="edit"
-                  data-id={task.id}
-                  onClick={() => handleEditTask(task.id)}
+                  data-id={task._id}
+                  onClick={() => handleEditTask(task._id)}
                 />
                 <img
                   src="https://cdn-icons-png.flaticon.com/128/3096/3096673.png"
                   className="delete"
-                  data-id={task.id}
-                  onClick={() => handleDeleteTask(task.id)}
+                  data-id={task._id}
+                  onClick={() => handleDeleteTask(task._id)}
                 />
               </div>
             </li>

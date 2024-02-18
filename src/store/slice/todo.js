@@ -16,6 +16,34 @@ export const create = createAsyncThunk('todo/create', async (data, {rejectWithVa
     }
 });
 
+export const update = createAsyncThunk('todo/update', async (data, {rejectWithValue}) => {
+    try {
+        const response = await api.patch(`/todos/${data._id}`, data);
+        if (response.status >= 200 && response.status < 300) {
+            return response.data;
+        }
+
+
+    } catch(error) {
+        console.log(error);
+        return rejectWithValue(error);
+    }
+});
+
+export const remove = createAsyncThunk('todo/remove', async (id, {rejectWithValue}) => {
+    try {
+        const response = await api.delete(`/todos/${id}`);
+        if (response.status >= 200 && response.status < 300) {
+            return response.data;
+        }
+
+
+    } catch(error) {
+        console.log(error);
+        return rejectWithValue(error);
+    }
+});
+
 export const getAll = createAsyncThunk('todo/getAll', async (_, {rejectWithValue}) => {
     try {
         const response = await api.get('/todos');
@@ -65,6 +93,44 @@ const todoSlice = createSlice({
                 state.todos = action.payload;
             })
             .addCase(getAll.rejected, (state, action) => {
+                state.todoLoading = false;
+                toast.error(action.payload.response.data.message)
+            })
+            .addCase(update.pending, (state) => {
+                state.todoLoading = true
+            })
+            .addCase(update.fulfilled, (state, action) => {
+                state.todoLoading = false;
+                const updated = state.todos.map(item => {
+                    if (item._id === action.meta.arg._id) {
+                        const {text, isDone, ...rest} = item;
+                        return {
+                                text: action.meta.arg.text,
+                                isDone: action.meta.arg.isDone,
+                                ...rest
+                            }
+                    }
+
+                    return item;
+                })
+                state.todos = updated;
+                toast.success('Todo was updated')
+            })
+            .addCase(update.rejected, (state, action) => {
+                state.todoLoading = false;
+                toast.error(action.payload.response.data.message)
+            })
+            .addCase(remove.pending, (state) => {
+                state.todoLoading = true
+            })
+            .addCase(remove.fulfilled, (state, action) => {
+                state.todoLoading = false;
+                state.todos = state.todos.filter(item => {
+                    return item._id !== action.meta.arg
+                })
+                toast.success("Todo was deleted");
+            })
+            .addCase(remove.rejected, (state, action) => {
                 state.todoLoading = false;
                 toast.error(action.payload.response.data.message)
             })
