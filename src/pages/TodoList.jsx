@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import todoImage from "../image/todo.png";
 import {useSelector, useDispatch} from 'react-redux';
-import {getAll, create, update, remove} from '../store/slice/todo';
+import {getAll, create, update, remove, updateAll, removeAll} from '../store/slice/todo';
 import Loader from '../components/Loader';
 
 const TodoList = () => {
   // State variables
   const [inputValue, setInputValue] = useState(''); // Holds the value of the input field
-  const [filter, setFilter] = useState('all'); // Holds the current filter type
+  const [filter, setFilter] = useState(''); // Holds the current filter type
   const [editTaskId, setEditTaskId] = useState(null); // Holds the ID of the task being edited
   const {todos, todosLoading} = useSelector(state => state.todo);
   const dispatch = useDispatch();
 
   // Fetch initial data
   useEffect(() => {
-    dispatch(getAll());
-  }, []);
+    dispatch(getAll(filter));
+  }, [filter]);
 
   // Handle input change
   const handleInputChange = (event) => {
@@ -25,6 +25,7 @@ const TodoList = () => {
   // Add a new task
   const handleAddTask = async () => {
     dispatch(create({text: inputValue}));
+    setInputValue('');
   };
 
   // Handle checkbox change for a task
@@ -57,11 +58,14 @@ const TodoList = () => {
 
   // Mark all tasks as completed
   const handleCompleteAll = () => {
-
+    const idArray = todos.map(todo => todo._id);
+    dispatch(updateAll(idArray));
   };
 
   // Clear completed tasks
   const handleClearCompleted = () => {
+    const idArray = todos.filter(item => item.isDone).map(todo => todo._id);
+    dispatch(removeAll(idArray));
   };
 
   // Handle filter change
@@ -153,13 +157,13 @@ const TodoList = () => {
           <div className="dropdown">
             <button className="dropbtn">Filter</button>
             <div className="dropdown-content">
-              <a href="#" id="all" onClick={() => handleFilterChange('all')}>
+              <a href="#" id="all" onClick={() => handleFilterChange('')}>
                 All
               </a>
-              <a href="#" id="rem" onClick={() => handleFilterChange('uncompleted')}>
+              <a href="#" id="rem" onClick={() => handleFilterChange(false)}>
                 Uncompleted
               </a>
-              <a href="#" id="com" onClick={() => handleFilterChange('completed')}>
+              <a href="#" id="com" onClick={() => handleFilterChange(true)}>
                 Completed
               </a>
             </div>
