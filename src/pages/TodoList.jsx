@@ -27,9 +27,7 @@ const TodoList = () => {
 
   // Add a new task
   const handleAddTask = async () => {
-    const todoDate = new Date(date)
-    console.log({text: inputValue, todoDate})
-    // dispatch(create({text: inputValue}));  
+    dispatch(create({text: inputValue, todoDate: date}));  
     setInputValue('');
   };
 
