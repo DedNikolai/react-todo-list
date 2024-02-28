@@ -94,9 +94,14 @@ const TodoList = () => {
   return (
     <div className="container">
       <div className="todo-app">
-        <h2>
-          <img src={todoImage} alt="todo-image" /> Todo List
-        </h2>
+        <div className='header'>
+          <h2>
+            <img src={todoImage} alt="todo-image" /> Todo List
+          </h2>
+          <div className='row'>
+            <input type='date' className='add-task'/>
+          </div>
+        </div>
         <div className="row">
           <i className="fas fa-list-check"></i>
           <input
