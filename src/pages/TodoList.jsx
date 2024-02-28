@@ -3,6 +3,7 @@ import todoImage from "../image/todo.png";
 import {useSelector, useDispatch} from 'react-redux';
 import {getAll, create, update, remove, updateAll, removeAll} from '../store/slice/todo';
 import Loader from '../components/Loader';
+import moment from 'moment';
 
 const TodoList = () => {
   // State variables
@@ -10,6 +11,8 @@ const TodoList = () => {
   const [filter, setFilter] = useState(''); // Holds the current filter type
   const [editTaskId, setEditTaskId] = useState(null); // Holds the ID of the task being edited
   const {todos, todosLoading} = useSelector(state => state.todo);
+  const currentDate = moment(new Date()).format("YYYY-MM-DD");
+  const [date, setDate] = useState(currentDate);
   const dispatch = useDispatch();
 
   // Fetch initial data
@@ -24,7 +27,9 @@ const TodoList = () => {
 
   // Add a new task
   const handleAddTask = async () => {
-    dispatch(create({text: inputValue}));
+    const todoDate = new Date(date)
+    console.log({text: inputValue, todoDate})
+    // dispatch(create({text: inputValue}));  
     setInputValue('');
   };
 
@@ -73,6 +78,10 @@ const TodoList = () => {
     setFilter(filterType);
   };
 
+  const handleChangeDate = (e) => {
+    setDate(e.target.value);
+  }
+
   // Filter tasks based on the selected filter
   const filteredTasks = todos.filter((task) => {
     if (filter === 'all') {
@@ -98,8 +107,14 @@ const TodoList = () => {
           <h2>
             <img src={todoImage} alt="todo-image" /> Todo List
           </h2>
-          <div className='row'>
-            <input type='date' className='add-task'/>
+          <div className="row">
+            <input
+              type="date"
+              id='date'
+              className="add-task"
+              value={date}
+              onChange={handleChangeDate}
+            />
           </div>
         </div>
         <div className="row">
