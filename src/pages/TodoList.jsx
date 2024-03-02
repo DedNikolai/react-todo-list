@@ -17,7 +17,7 @@ const TodoList = () => {
 
   // Fetch initial data
   useEffect(() => {
-    dispatch(getAll(filter));
+    dispatch(getAll({isDone: filter, todoDate: ''}));
   }, [filter]);
 
   // Handle input change
@@ -78,6 +78,10 @@ const TodoList = () => {
 
   const handleChangeDate = (e) => {
     setDate(e.target.value);
+  }
+
+  const handleFilterByDate = () => {
+    dispatch(getAll({isDone: '', todoDate: date}));
   }
 
   // Filter tasks based on the selected filter
@@ -175,14 +179,17 @@ const TodoList = () => {
           <div className="dropdown">
             <button className="dropbtn">Filter</button>
             <div className="dropdown-content">
-              <a href="#" id="all" onClick={() => handleFilterChange('')}>
+              <a href="#" id="all" onClick={() => handleFilterChange('', '')}>
                 All
               </a>
-              <a href="#" id="rem" onClick={() => handleFilterChange(false)}>
+              <a href="#" id="rem" onClick={() => handleFilterChange(false, '')}>
                 Uncompleted
               </a>
-              <a href="#" id="com" onClick={() => handleFilterChange(true)}>
+              <a href="#" id="com" onClick={() => handleFilterChange(true, '')}>
                 Completed
+              </a>
+              <a href="#" id="date" onClick={handleFilterByDate}>
+                Сurrent date
               </a>
             </div>
           </div>
