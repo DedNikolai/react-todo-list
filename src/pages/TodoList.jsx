@@ -81,6 +81,7 @@ const TodoList = () => {
   }
 
   const handleFilterByDate = () => {
+    setFilter(null)
     dispatch(getAll({isDone: '', todoDate: date}));
   }
 

@@ -73,10 +73,10 @@ export const remove = createAsyncThunk('todo/remove', async (id, {rejectWithValu
 });
 
 export const getAll = createAsyncThunk('todo/getAll', async (options, {rejectWithValue}) => {
-    const {isDone, todoDate} = options
+    const {isDone, todoDate, page = 1, size = 5} = options
     
     try {
-        const response = await api.get(`/todos?isDone=${isDone}&todoDate=${todoDate}`);
+        const response = await api.get(`/todos?isDone=${isDone || ''}&todoDate=${todoDate}&page=${page}&size=${size}`);
 
         if (response.status >= 200 && response.status < 300) {
             return response.data;
