@@ -11,15 +11,15 @@ const TodoList = () => {
   const [inputValue, setInputValue] = useState(''); // Holds the value of the input field
   const [filter, setFilter] = useState(''); // Holds the current filter type
   const [editTaskId, setEditTaskId] = useState(null); // Holds the ID of the task being edited
-  const {todos, todosLoading, totalPages, currentPage} = useSelector(state => state.todo);
+  const {todos, todosLoading, totalPages, currentPage = 1} = useSelector(state => state.todo);
   const currentDate = moment(new Date()).format("YYYY-MM-DD");
   const [date, setDate] = useState(currentDate);
+  const [isDateFilter, toggleDateFilter] = useState(false)
   const dispatch = useDispatch();
   // Fetch initial data
   useEffect(() => {
     dispatch(getAll({isDone: filter, todoDate: ''}));
   }, []);
-
   // Handle input change
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -74,6 +74,7 @@ const TodoList = () => {
   // Handle filter change
   const handleFilterChange = (filterType, date) => {
     setFilter(filterType);
+    toggleDateFilter(false);
     dispatch(getAll({isDone: filterType, todoDate: ''}));
   };
 
@@ -82,12 +83,12 @@ const TodoList = () => {
   }
 
   const handleFilterByDate = () => {
-    setFilter(null)
+    toggleDateFilter(true);
     dispatch(getAll({isDone: '', todoDate: date}));
   }
 
   const handlePageClick = (value) => {
-    dispatch(getAll({isDone: filter, todoDate: '', page: value.selected + 1}));
+    dispatch(getAll({isDone: filter, todoDate: isDateFilter ? date : '', page: value.selected + 1}));
   }
 
   // Filter tasks based on the selected filter
@@ -191,6 +192,7 @@ const TodoList = () => {
           pageCount={totalPages}
           previousLabel="<"
           renderOnZeroPageCount={null}
+          forcePage={currentPage - 1}
         />    
         <div className="filters">
           <div className="dropdown">
