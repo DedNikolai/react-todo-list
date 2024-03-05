@@ -73,10 +73,11 @@ export const remove = createAsyncThunk('todo/remove', async (id, {rejectWithValu
 });
 
 export const getAll = createAsyncThunk('todo/getAll', async (options, {rejectWithValue}) => {
-    const {isDone, todoDate, page = 1, size = 5} = options
-    
+    const {isDone, todoDate, page = 1, size = 2} = options
+    const doone = isDone === null ? '' : isDone
+
     try {
-        const response = await api.get(`/todos?isDone=${isDone || ''}&todoDate=${todoDate}&page=${page}&size=${size}`);
+        const response = await api.get(`/todos?isDone=${doone}&todoDate=${todoDate}&page=${page}&size=${size}`);
 
         if (response.status >= 200 && response.status < 300) {
             return response.data;
@@ -120,7 +121,10 @@ const todoSlice = createSlice({
             })
             .addCase(getAll.fulfilled, (state, action) => {
                 state.todoLoading = false;
-                state.todos = action.payload;
+                const {todos, totalPages, currentPage} = action.payload
+                state.todos = todos;
+                state.totalPages = totalPages;
+                state.currentPage = currentPage
             })
             .addCase(getAll.rejected, (state, action) => {
                 state.todoLoading = false;

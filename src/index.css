@@ -353,3 +353,56 @@ input:focus {
   top: 0;
   width: auto;
   }
+
+
+  /*Pagination */
+
+  .pagination {
+    position: relative;
+    list-style: none;
+    height: 32px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2px;
+    cursor: pointer;
+  }
+  
+  .page-item {
+    list-style: none;
+    padding: 2px 12px;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2px;
+    font-size: 18px;
+  }
+
+  
+  
+  .active {
+    border: solid 1px #333;
+    border-radius: 40px;
+    color: #333;
+    border-radius: 50%;
+
+  }
+  
+  
+  .next {
+    font-size: 16px;
+    margin-left: 20px;
+    height: 20px;
+    width: 20px;
+
+  }
+
+  .previous {
+    font-size: 16px;
+    margin-right: 20px;
+    height: 20px;
+    width: 20px;
+  }

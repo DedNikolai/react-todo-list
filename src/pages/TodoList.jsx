@@ -4,21 +4,21 @@ import {useSelector, useDispatch} from 'react-redux';
 import {getAll, create, update, remove, updateAll, removeAll} from '../store/slice/todo';
 import Loader from '../components/Loader';
 import moment from 'moment';
+import ReactPaginate from 'react-paginate';
 
 const TodoList = () => {
   // State variables
   const [inputValue, setInputValue] = useState(''); // Holds the value of the input field
   const [filter, setFilter] = useState(''); // Holds the current filter type
   const [editTaskId, setEditTaskId] = useState(null); // Holds the ID of the task being edited
-  const {todos, todosLoading} = useSelector(state => state.todo);
+  const {todos, todosLoading, totalPages, currentPage} = useSelector(state => state.todo);
   const currentDate = moment(new Date()).format("YYYY-MM-DD");
   const [date, setDate] = useState(currentDate);
   const dispatch = useDispatch();
-
   // Fetch initial data
   useEffect(() => {
     dispatch(getAll({isDone: filter, todoDate: ''}));
-  }, [filter]);
+  }, []);
 
   // Handle input change
   const handleInputChange = (event) => {
@@ -72,8 +72,9 @@ const TodoList = () => {
   };
 
   // Handle filter change
-  const handleFilterChange = (filterType) => {
+  const handleFilterChange = (filterType, date) => {
     setFilter(filterType);
+    dispatch(getAll({isDone: filterType, todoDate: ''}));
   };
 
   const handleChangeDate = (e) => {
@@ -83,6 +84,10 @@ const TodoList = () => {
   const handleFilterByDate = () => {
     setFilter(null)
     dispatch(getAll({isDone: '', todoDate: date}));
+  }
+
+  const handlePageClick = (value) => {
+    dispatch(getAll({isDone: filter, todoDate: '', page: value.selected + 1}));
   }
 
   // Filter tasks based on the selected filter
@@ -175,7 +180,18 @@ const TodoList = () => {
             </li>
           ))}
         </ul>
-
+        <ReactPaginate
+          containerClassName={"pagination"}
+          pageClassName={"page-item"}
+          activeClassName={"active"}
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={totalPages}
+          previousLabel="<"
+          renderOnZeroPageCount={null}
+        />    
         <div className="filters">
           <div className="dropdown">
             <button className="dropbtn">Filter</button>
