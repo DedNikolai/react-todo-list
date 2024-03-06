@@ -44,9 +44,10 @@ export const updateAll = createAsyncThunk('todo/updateAll', async (data, {reject
     }
 });
 
-export const removeAll = createAsyncThunk('todo/removeAll', async (__, {rejectWithValue}) => {
+export const removeAll = createAsyncThunk('todo/removeAll', async (arr, {rejectWithValue}) => {
+
     try {
-        const response = await api.delete(`/todos`);
+        const response = await api.delete(`/todos?array=${arr}`);
         if (response.status >= 200 && response.status < 300) {
             return response.data;
         }
@@ -94,7 +95,8 @@ const todoSlice = createSlice({
     name: 'todo',
     initialState: {
         todos: [],
-        todosLoading: false
+        todosLoading: false,
+        currentPage: 0
     },
 
     reducers: {
@@ -160,7 +162,7 @@ const todoSlice = createSlice({
                 state.todoLoading = false;
                 state.todos = state.todos.filter(item => {
                     return item._id !== action.meta.arg
-                })
+                });
                 toast.success("Todo was deleted");
             })
             .addCase(remove.rejected, (state, action) => {
@@ -189,7 +191,7 @@ const todoSlice = createSlice({
                 state.todoLoading = false;
                 state.todos = state.todos.filter(item => {
                     return action.meta.arg.indexOf(item._id) === -1;
-                })
+                });
                 toast.success(action.payload.message)
             })
             .addCase(removeAll.rejected, (state, action) => {

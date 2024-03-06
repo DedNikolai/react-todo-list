@@ -11,7 +11,7 @@ const TodoList = () => {
   const [inputValue, setInputValue] = useState(''); // Holds the value of the input field
   const [filter, setFilter] = useState(''); // Holds the current filter type
   const [editTaskId, setEditTaskId] = useState(null); // Holds the ID of the task being edited
-  const {todos, todosLoading, totalPages, currentPage = 1} = useSelector(state => state.todo);
+  const {todos, todosLoading, totalPages = 0, currentPage = 1} = useSelector(state => state.todo);
   const currentDate = moment(new Date()).format("YYYY-MM-DD");
   const [date, setDate] = useState(currentDate);
   const [isDateFilter, toggleDateFilter] = useState(false)

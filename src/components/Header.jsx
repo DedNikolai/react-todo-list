@@ -147,7 +147,7 @@ function Header() {
           </Box>
           </>     
           :
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: 'right' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex', justifyContent: 'right' } }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar 
