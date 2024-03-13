@@ -38,9 +38,7 @@ export default function Register() {
 
 
   const onSubmit = (data) => {
-      dispatch(create(data)).then(() => {
-        navigate('/login')
-    })
+      dispatch(create(data))
   };
 
   if (user) return <Navigate to='/' />

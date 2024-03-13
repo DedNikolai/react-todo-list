@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './pages/Profile';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Verification from './pages/Verification';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
               <Route path='profile' element={<ProtectedRoute><Profile /></ProtectedRoute> }/>
               <Route path='login' element={<Login />}/>
               <Route path='register' element={<Register />}/>
+              <Route path='auth/verify/:id' element={<Verification />}/>
           </Route> 
       </Routes>
     </Fragment>

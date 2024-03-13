@@ -65,11 +65,28 @@ export const update = createAsyncThunk('user/update', async (data, {rejectWithVa
     }
 });
 
+export const verify = createAsyncThunk('user/verify', async (data, {rejectWithValue}) => {
+    const {token, id} = data;
+    try {
+        const response = await api.get(`/auth/verify/${id}?token=${token}`);
+        if (response.status !== 200) {
+            throw new Error(response.errors);
+        }
+        
+        return response.data;
+
+    } catch (error) {
+        console.log(error);
+        return rejectWithValue(error);
+    }
+});
+
 const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: null,
-        userLoading: true
+        userLoading: true,
+        verifyStatus: 'pending'
     },
 
     reducers: {
@@ -135,6 +152,17 @@ const userSlice = createSlice({
             .addCase(update.rejected, (state, action) => {
                 toast.error(action.payload.response.data.message)    
                 state.userLoading = false;
+            })
+            .addCase(verify.pending, (state) => {
+                state.verifyStatus = 'pending';
+            })
+            .addCase(verify.fulfilled, (state, action) => {            
+                state.verifyStatus = 'success';
+                toast.success('Your email successfully confirmed')
+            })
+            .addCase(verify.rejected, (state, action) => {
+                toast.error(action.payload.response.data.message)    
+                state.verifyStatus = 'error';
             })
     }
 });

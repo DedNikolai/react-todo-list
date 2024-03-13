@@ -22,7 +22,7 @@ const schema = yup.object({
 const defaultTheme = createTheme();
 
 export default function Login() {  
-  const {user, userLoading} = useSelector(state => state.user);
+  const {user} = useSelector(state => state.user);
   const dispatch = useDispatch();
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
     resolver: yupResolver(schema),
