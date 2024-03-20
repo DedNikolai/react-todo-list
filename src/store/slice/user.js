@@ -1,6 +1,7 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import api from '../../utils/api';
 import { toast } from 'react-toastify';
+import { Email } from '@mui/icons-material';
 
 export const login = createAsyncThunk('user/login', async (data, {rejectWithValue}) => {
     try {
@@ -111,6 +112,24 @@ export const resetPass = createAsyncThunk('user/resetPass', async (data, {reject
     }
 });
 
+export const updateEmail = createAsyncThunk('user/updateEmail', async (data, {rejectWithValue}) => {
+    const {id, ...email} = data;
+
+    try {
+        const response = await api.post(`/auth/update-email/${id}`, email);
+        if (response.status !== 200) {
+            throw new Error(response.errors);
+        }
+        
+        return response.data;
+
+    } catch (error) {
+        console.log(error);
+        return rejectWithValue(error);
+    }
+});
+
+
 const userSlice = createSlice({
     name: 'user',
     initialState: {
@@ -204,6 +223,14 @@ const userSlice = createSlice({
                 toast.success('Passwor was successfully changed')
             })
             .addCase(resetPass.rejected, (state, action) => {
+                toast.error(action.payload.response.data.message)    
+            })
+            .addCase(updateEmail.pending, (state) => {
+            })
+            .addCase(updateEmail.fulfilled, (state, action) => {
+                toast.success('We send verify code to you email to confirm changes')
+            })
+            .addCase(updateEmail.rejected, (state, action) => {
                 toast.error(action.payload.response.data.message)    
             })
     }

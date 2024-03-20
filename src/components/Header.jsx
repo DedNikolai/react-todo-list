@@ -177,6 +177,11 @@ function Header() {
                     <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
               </Link>
+              <Link to='/security'>
+                <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Security</Typography>
+                </MenuItem>
+              </Link>
                <MenuItem onClick={signOut}>
                   <Typography textAlign="center">Logout</Typography>
                </MenuItem>

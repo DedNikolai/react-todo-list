@@ -116,6 +116,7 @@ export default function Profile() {
                       id="email"
                       name="email"
                       autoComplete="email"
+                      disabled
                     />
                   </Grid>
                 </Grid>

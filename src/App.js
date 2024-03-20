@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Verification from './pages/Verification';
 import ForgotPass from './pages/ForgotPass';
 import ResetPass from './pages/ResetPass';
+import Security from './pages/Security';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route path='/' element={<Layout />}>
               <Route index element={<ProtectedRoute><TodoList /></ProtectedRoute> }/>
               <Route path='profile' element={<ProtectedRoute><Profile /></ProtectedRoute> }/>
+              <Route path='security' element={<ProtectedRoute><Security /></ProtectedRoute> }/>
               <Route path='login' element={<Login />}/>
               <Route path='register' element={<Register />}/>
               <Route path='forgot-pass' element={<ForgotPass />}/>
