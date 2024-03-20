@@ -81,12 +81,42 @@ export const verify = createAsyncThunk('user/verify', async (data, {rejectWithVa
     }
 });
 
+export const forgotPass = createAsyncThunk('user/forgotPass', async (data, {rejectWithValue}) => {
+    try {
+        const response = await api.post(`/auth/forgot-pass`, data);
+        if (response.status !== 200) {
+            throw new Error(response.errors);
+        }
+        
+        return response.data;
+
+    } catch (error) {
+        console.log(error);
+        return rejectWithValue(error);
+    }
+});
+
+export const resetPass = createAsyncThunk('user/resetPass', async (data, {rejectWithValue}) => {
+    try {
+        const response = await api.post(`/auth/reset-pass`, data);
+        if (response.status !== 200) {
+            throw new Error(response.errors);
+        }
+        
+        return response.data;
+
+    } catch (error) {
+        console.log(error);
+        return rejectWithValue(error);
+    }
+});
+
 const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: null,
         userLoading: true,
-        verifyStatus: 'pending'
+        verifyStatus: 'pending',
     },
 
     reducers: {
@@ -163,6 +193,18 @@ const userSlice = createSlice({
             .addCase(verify.rejected, (state, action) => {
                 toast.error(action.payload.response.data.message)    
                 state.verifyStatus = 'error';
+            })
+            .addCase(forgotPass.fulfilled, (state, action) => {            
+                toast.success('We send letter to you email to reset password')
+            })
+            .addCase(forgotPass.rejected, (state, action) => {
+                toast.error(action.payload.response.data.message)    
+            })
+            .addCase(resetPass.fulfilled, (state, action) => {            
+                toast.success('Passwor was successfully changed')
+            })
+            .addCase(resetPass.rejected, (state, action) => {
+                toast.error(action.payload.response.data.message)    
             })
     }
 });
