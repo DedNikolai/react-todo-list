@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useSelector, useDispatch } from 'react-redux';
-import {updateEmail} from '../store/slice/user';
+import {resetEmail, updateEmail} from '../store/slice/user';
 
 const defaultTheme = createTheme();
 
@@ -22,18 +22,30 @@ const schema = yup.object({
 
 export default function Security() {
   const {user} = useSelector(state => state.user);
+  const [isToken, setIsToken] = React.useState(false);
   const {register, handleSubmit, formState: {errors}} = useForm({
     resolver: yupResolver(schema),
     mode: 'onBlur',
     defaultValues: {
       email: user.email,
+      token: ''
     }
   });
   const dispatch = useDispatch();
 
   const onSubmit = (data, e) => {
     e.preventDefault();
-    dispatch(updateEmail({id: user._id, email: data.email}));
+    if (!isToken) {
+      dispatch(resetEmail({id: user._id, email: data.email}))
+      .then(res => {
+        if (res.payload.status === 200) {
+          setIsToken(true);
+        }
+      });
+    } else {
+      dispatch(updateEmail({id: user._id, ...data}))
+      .then(res => setIsToken(false))
+    }
   };
 
   return (
@@ -66,6 +78,20 @@ export default function Security() {
                       autoComplete="email"
                     />
                   </Grid>
+                  {
+                    isToken ?
+                    <Grid item xs={12}>
+                      <TextField
+                        {...register("token")}
+                        label={errors.email?.message || "Code from email"}
+                        fullWidth
+                        id="token"
+                        name="token"
+                        autoComplete="Code"
+                      />
+                    </Grid> : ''
+                  }
+                  
                 </Grid>
                 <Button
                   type="submit"
@@ -73,7 +99,7 @@ export default function Security() {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Save
+                  Send
                 </Button>
               </Box>
             </Box>

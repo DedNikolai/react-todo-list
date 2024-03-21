@@ -112,11 +112,28 @@ export const resetPass = createAsyncThunk('user/resetPass', async (data, {reject
     }
 });
 
-export const updateEmail = createAsyncThunk('user/updateEmail', async (data, {rejectWithValue}) => {
-    const {id, ...email} = data;
+export const resetEmail = createAsyncThunk('user/resetEmail', async (payload, {rejectWithValue}) => {
+    const {id, ...email} = payload;
 
     try {
-        const response = await api.post(`/auth/update-email/${id}`, email);
+        const response = await api.post(`/auth/reset-email/${id}`, email);
+        if (response.status !== 200) {
+            throw new Error(response.errors);
+        }
+        const {status, data} = response;
+        return {status, data};
+
+    } catch (error) {
+        console.log(error);
+        return rejectWithValue(error);
+    }
+});
+
+export const updateEmail = createAsyncThunk('user/updateEmail', async (payload, {rejectWithValue}) => {
+    const {id, ...email} = payload;
+
+    try {
+        const response = await api.patch(`/auth/update-email/${id}`, email);
         if (response.status !== 200) {
             throw new Error(response.errors);
         }
@@ -193,7 +210,6 @@ const userSlice = createSlice({
                 state.userLoading = true;
             })
             .addCase(update.fulfilled, (state, action) => {
-                
                 state.userLoading = false;
                 state.user = action.payload;
                 toast.success('Update seccess')
@@ -225,13 +241,25 @@ const userSlice = createSlice({
             .addCase(resetPass.rejected, (state, action) => {
                 toast.error(action.payload.response.data.message)    
             })
+            .addCase(resetEmail.pending, (state) => {
+            })
+            .addCase(resetEmail.fulfilled, (state, action) => {
+                toast.success(action.payload.data.message)
+            })
+            .addCase(resetEmail.rejected, (state, action) => {
+                toast.error(action.payload.response.data.message)    
+            })
             .addCase(updateEmail.pending, (state) => {
+                state.userLoading = true;
             })
             .addCase(updateEmail.fulfilled, (state, action) => {
-                toast.success('We send verify code to you email to confirm changes')
+                state.userLoading = false;
+                state.user = action.payload;
+                toast.success('Email updated')
             })
             .addCase(updateEmail.rejected, (state, action) => {
                 toast.error(action.payload.response.data.message)    
+                state.userLoading = false;   
             })
     }
 });
