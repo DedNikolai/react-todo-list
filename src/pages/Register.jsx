@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { create } from '../store/slice/user';
+import Loader from '../components/Loader';
 
 const defaultTheme = createTheme();
 
@@ -32,16 +33,39 @@ export default function Register() {
     resolver: yupResolver(schema),
     mode: 'onBlur'
   });
-  const navigate = useNavigate();
-  const {user} = useSelector(state => state.user)
+
+  const {user} = useSelector(state => state.user);
+  const [success, setIsSuccess] = React.useState(false);
+  const [registration, setIsRegistration] = React.useState(false);
   const dispatch = useDispatch();
 
 
-  const onSubmit = (data) => {
+  const onSubmit = (data, e) => {
+      e.preventDefault();
+      setIsRegistration(true);
       dispatch(create(data))
+      .then(res => {
+        if (res.payload.status === 200) {
+          setIsSuccess(true)
+        }
+      }).finally(() => setIsRegistration(false));
   };
 
   if (user) return <Navigate to='/' />
+
+  if (registration) return <Loader />
+
+  if (success) {
+    return (
+      <div className="container">
+          <div className="todo-app">
+            <p className="verify">
+              Registration success we send letter to your email to complite it
+            </p>   
+          </div>
+      </div>
+    )
+  }
 
   return (
     <div className="container">

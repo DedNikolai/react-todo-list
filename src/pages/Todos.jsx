@@ -7,13 +7,14 @@ import moment from 'moment';
 import CustomPagination from '../components/CustomPagination';
 import Filters from '../components/Filters';
 import ListTasks from '../components/ListTasks';
+import Loader from '../components/Loader';
 
 const Todos = () => {
   // State variables
   const [inputValue, setInputValue] = useState(''); // Holds the value of the input field
   const [filter, setFilter] = useState(''); // Holds the current filter type
   const [editTaskId, setEditTaskId] = useState(null); // Holds the ID of the task being edited
-  const {todos} = useSelector(state => state.todo);
+  const {todos, todosLoading} = useSelector(state => state.todo);
   const currentDate = moment(new Date()).format("YYYY-MM-DD");
   const [date, setDate] = useState(currentDate);
   const [isDateFilter, toggleDateFilter] = useState(false)
@@ -62,6 +63,8 @@ const Todos = () => {
       return true;
     }); 
   }, [todos])
+
+  if (todosLoading) return <Loader />
 
   // Render the todo list
   return (

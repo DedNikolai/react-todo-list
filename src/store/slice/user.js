@@ -32,14 +32,15 @@ export const authMe = createAsyncThunk('user/authMe', async (__, {rejectWithValu
     }
 });
 
-export const create = createAsyncThunk('user/create', async (data, {rejectWithValue}) => {
+export const create = createAsyncThunk('user/create', async (payload, {rejectWithValue}) => {
     try {
-        const response = await api.post('/auth/register', data);
+        const response = await api.post('/auth/register', payload);
         if (response.status !== 200) {
             throw new Error(response.errors);
         }
         
-        return response.data;
+        const {status, data} = response;
+        return {status, data};
 
     } catch (error) {
         console.log(error);
@@ -195,16 +196,13 @@ const userSlice = createSlice({
                 state.userLoading = false;
             })
             .addCase(create.pending, (state) => {
-                state.userLoading = true;
             })
             .addCase(create.fulfilled, (state, action) => {
                 
-                state.userLoading = false;
-                toast.success('Register seccess')
+                toast.success(action.payload.data.message)
             })
             .addCase(create.rejected, (state, action) => {
                 toast.error(action.payload.response.data.message)    
-                state.userLoading = false;
             })
             .addCase(update.pending, (state) => {
                 state.userLoading = true;
