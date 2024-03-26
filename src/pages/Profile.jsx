@@ -14,6 +14,7 @@ import * as yup from "yup";
 import { useSelector, useDispatch } from 'react-redux';
 import api from '../utils/api';
 import {update} from '../store/slice/user';
+import {app} from '../constants/constants';
 
 const defaultTheme = createTheme();
 
@@ -38,7 +39,7 @@ export default function Profile() {
   });
   const [avatar, setavatar] = React.useState('');
   const dispatch = useDispatch();
-  const userAvatarImg = avatar ? `http://localhost:8000${avatar}` : user.avatarUrl;
+  const userAvatarImg = avatar ? `${app.SERVER_URL}${avatar}` : user.avatarUrl;
 
   const onSubmit = (data) => {
     dispatch(update({id: user._id, avatarUrl: userAvatarImg, ...data}));

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import todoImage from "../image/todo.png";
 import {useSelector, useDispatch} from 'react-redux';
-import {getAll, create, update, updateAll, removeAll} from '../store/slice/todo';
+import {getAll, create, update} from '../store/slice/todo';
 import TodoList from '../components/TodoList';
 import moment from 'moment';
 import CustomPagination from '../components/CustomPagination';

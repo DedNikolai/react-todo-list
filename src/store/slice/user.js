@@ -1,7 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import api from '../../utils/api';
 import { toast } from 'react-toastify';
-import { Email } from '@mui/icons-material';
 
 export const login = createAsyncThunk('user/login', async (data, {rejectWithValue}) => {
     try {
