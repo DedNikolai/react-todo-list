@@ -30,7 +30,7 @@ body {
   background: white;
   border: 2px solid black;
   margin: 100px auto 20px;
-  padding: 40px 30px 30px;
+  padding: 40px 10px 30px;
   border-radius: 15px;
 }
 
@@ -55,7 +55,14 @@ body {
   background: #edeef0;
   border-radius: 30px;
   padding-left: 20px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
+}
+
+.row__simple {
+  display: none;
+  background: none;
+  padding: 0;
+  border-radius: 0;
 }
 
 input{
@@ -67,10 +74,10 @@ input{
   padding: 10px;
 }
 
-button{
+.btn, .btn__large {
   border: none;
   outline: none;
-  padding: 16px 50px;
+  padding: 16px 20px;
   background: #ff5945;
   color: white;
   font-size: 16px;
@@ -78,14 +85,30 @@ button{
   border-radius: 40px;
 }
 
+.btn__large {
+  width: 100%;
+}
 /* styling on mid */
 .mid{
   display: flex;
   font-size: 1.2rem;
-  margin-left: 20px;
   margin-bottom: 30px;
+  justify-content: space-between;
   /* justify-content: space-between; */
+}
 
+.mid_item {
+  width: 150px;
+  display: flex;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.mid_item__block {
+  display: block;
 }
 
 #complete-all{
@@ -94,7 +117,7 @@ button{
 }
 
 #clear-all{
-  margin-left: 90px;
+  /* margin-left: 90px; */
   cursor: pointer;
 }
 
@@ -410,4 +433,14 @@ input:focus {
   .verify {
     text-align: center;
     font-size: 18px;
+  }
+
+  @media (max-width: 480px) {
+    .btn {
+      display: none;
+    }
+
+    .row__simple {
+      display: block;
+    }
   }

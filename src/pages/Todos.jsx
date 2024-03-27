@@ -95,7 +95,12 @@ const Todos = () => {
             value={inputValue}
             onChange={handleInputChange}
           />
-          <button id="btn" onClick={editTaskId ? handleUpdateTask : handleAddTask}>
+          <button className="btn" onClick={editTaskId ? handleUpdateTask : handleAddTask}>
+            {editTaskId ? 'Update' : 'Add'}
+          </button>
+        </div>
+        <div className="row row__simple">
+          <button className="btn__large" onClick={editTaskId ? handleUpdateTask : handleAddTask}>
             {editTaskId ? 'Update' : 'Add'}
           </button>
         </div>

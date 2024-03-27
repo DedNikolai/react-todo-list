@@ -19,13 +19,15 @@ function ListTasks() {
   };
     return (
         <div className="mid">
-          <i className="fas fa-check-double"></i>
-          <p id="complete-all" onClick={handleCompleteAll}>
-            Complete all tasks
-          </p>
-          <p id="clear-all" onClick={handleClearCompleted}>
-            Delete comp tasks
-          </p>
+          <div className='mid_item'>
+            <i className="fas fa-check-double"></i>
+            <p id="complete-all" onClick={handleCompleteAll}>
+              Complete all
+            </p>
+          </div>
+          <div className='mid_item mid_item__block'>
+            Delete all
+          </div>
         </div>
     )
 }
