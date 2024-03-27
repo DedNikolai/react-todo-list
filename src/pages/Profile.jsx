@@ -39,7 +39,7 @@ export default function Profile() {
   });
   const [avatar, setavatar] = React.useState('');
   const dispatch = useDispatch();
-  const userAvatarImg = avatar ? `${process.env.REACT_APP_API_URL}${avatar}` : user.avatarUrl;
+  const userAvatarImg = avatar ? `${app.SERVER_URL}${avatar}` : user.avatarUrl;
 
   const onSubmit = (data) => {
     dispatch(update({id: user._id, avatarUrl: userAvatarImg, ...data}));
