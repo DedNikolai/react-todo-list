@@ -86,7 +86,7 @@ export default function Login() {
                 >
                   Sign In
                 </Button>
-                <Grid container>
+                <Grid container className='auth-container'>
                   <Grid item xs>
                     <Link to="/forgot-pass" className="custom-link">
                       Forgot password?

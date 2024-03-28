@@ -190,7 +190,7 @@ ul li:hover {
   text-decoration: line-through;
 }
 .delete {
-  height: 25px;
+    height: 35px;
     padding: 5px 0px;
     border-radius: 3px;
 }
@@ -200,7 +200,7 @@ ul li:hover {
 }
 
 .edit{
-  height: 25px;
+  height: 35px;
   padding: 5px 0px;
   border-radius: 3px;
   margin-right: 10px;
@@ -236,7 +236,10 @@ h1 {
 /*
 dropdown*/
 .filters{
-margin-top: 40px;
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 .dropbtn {
 background-color: #4CAF50;
@@ -281,12 +284,10 @@ background-color: #3e8e41;
 
 .completed-task{
 display: inline-block;
-margin-left: 100px;
 }
 
 .remaining-task{
 display: inline-block;
-margin-left: 80px;
 }
 
 /* .remaining-task p{
@@ -442,5 +443,9 @@ input:focus {
 
     .row__simple {
       display: block;
+    }
+
+    .auth-container {
+      font-size: 14px;
     }
   }
