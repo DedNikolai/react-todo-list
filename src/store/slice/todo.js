@@ -74,7 +74,7 @@ export const remove = createAsyncThunk('todo/remove', async (id, {rejectWithValu
 });
 
 export const getAll = createAsyncThunk('todo/getAll', async (options, {rejectWithValue}) => {
-    const {isDone, todoDate, page = 1, size = 2} = options
+    const {isDone, todoDate, page = 1, size = 5} = options
 
     try {
         const response = await api.get(`/todos?isDone=${isDone}&todoDate=${todoDate}&page=${page}&size=${size}`);
